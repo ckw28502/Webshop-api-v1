@@ -9,9 +9,11 @@
         /// Service responsible for user-related operations
         /// </summary>
         /// <param name="userRepository">The user repository used to interact with user data.</param>
-        public class UserService(IUserRepository userRepository) : IUserService
+        /// <param name="passwordHasher">The service responsible for securely hashing passwords.</param>
+        public class UserService(IUserRepository userRepository, IPasswordHasher passwordHasher) : IUserService
         {
             private readonly IUserRepository _userRepository = userRepository;
+            private readonly IPasswordHasher _passwordHasher = passwordHasher;
 
             /// <summary>
             /// Registers a new user asynchronously, after checking if the username is available.
@@ -28,7 +30,7 @@
                 }
 
                 // Hash the password
-                (byte[] salt, string hashedPassword) = PasswordHasher.HashPassword(request.Password);
+                (byte[] salt, string hashedPassword) = _passwordHasher.HashPassword(request.Password);
 
                 // Create a new user model from the dto
                 UserModel user = new()

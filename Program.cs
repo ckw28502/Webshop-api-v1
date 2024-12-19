@@ -4,6 +4,7 @@ using V1.Data;
 using V1.Middlewares;
 using V1.Repositories;
 using V1.Services;
+using V1.Utils;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ if (string.IsNullOrEmpty(connectionString))
 
 // Add connection string to db context
 builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(connectionString));
+
+// Register utils services
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 // Register repositories for Dependency Injection
 builder.Services.AddScoped<IUserRepository, UserRepository>();

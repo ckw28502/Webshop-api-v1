@@ -6,7 +6,7 @@ namespace V1.Utils
     /// <summary>
     /// Provides functionality for hashing passwords securely using a salt and PBKDF2.
     /// </summary>
-    public class PasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         /// <summary>
         /// Hashes the given password using a randomly generated salt and PBKDF2.
@@ -19,7 +19,7 @@ namespace V1.Utils
         ///   <item><description>The hashed password as a Base64-encoded string.</description></item>
         /// </list>
         /// </returns>
-        public static (byte[] salt, string hashedPassword) HashPassword(string password)
+        public (byte[] salt, string hashedPassword) HashPassword(string password)
         {
             // Generate a random 128-bit salt (16 bytes)
             byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
