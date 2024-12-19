@@ -29,5 +29,12 @@ namespace V1.Models
         [Required(ErrorMessage = "Password is required.")]
         [PasswordValidation(ErrorMessage = "Password must meet the required criteria.")]
         public required string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the salt for the password hashing.
+        /// Stored as a byte array.
+        /// </summary>
+        [Required(ErrorMessage = "Salt is required.")]
+        public required byte[] Salt { get; set; } = [];
     }
 }
