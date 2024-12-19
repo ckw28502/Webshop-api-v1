@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using V1.Data;
+using V1.Middlewares;
 using V1.Repositories;
 using V1.Services;
 
@@ -42,6 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseHsts();
+app.UseMiddleware<SecurityHeaderMiddleware>();
+
 app.MapControllers();
 
 app.Run();
