@@ -6,14 +6,12 @@ using V1.Repositories;
 
 namespace V1.Tests.Repositories
 {
-    public class UserRepositoryTest
+    public class UserRepositoryTests
     {
         private readonly UserRepository _userRepository;
         private readonly PostgresDbContext _dbContext;
 
-        private readonly UserModel user;
-
-        public UserRepositoryTest()
+        public UserRepositoryTests()
         {
             DbContextOptions<PostgresDbContext> options = new DbContextOptionsBuilder<PostgresDbContext>()
                 .UseInMemoryDatabase("testDatabase")  // Use In-Memory DB for testing
@@ -22,30 +20,36 @@ namespace V1.Tests.Repositories
             _dbContext = new PostgresDbContext(options);
 
             _userRepository = new UserRepository(_dbContext);
-
-            user = new UserModel
-            {
-                Username = "user",
-                Password = "User1234",
-                Salt = RandomNumberGenerator.GetBytes(1)
-            };
         }
 
         [Fact]
         public async Task UsernameExists_ReturnFalse_WhenUsernameIsNotFound()
         {
+            // Arrange
+            UserModel user = new()
+            {
+                Username = "not found user",
+                Password = "User1234",
+                Salt = RandomNumberGenerator.GetBytes(1)
+            };
+
             // Act
             bool result = await _userRepository.UsernameExists(user.Username);
 
             // Assert
             Assert.False(result);
-            
         }
 
         [Fact]
         public async Task UsernameExists_ReturnTrue_WhenUsernameIsFound()
         {
             // Arrange
+            UserModel user = new()
+            {
+                Username = "found user",
+                Password = "User1234",
+                Salt = RandomNumberGenerator.GetBytes(1)
+            };
             await _userRepository.CreateUser(user);
 
             // Act
