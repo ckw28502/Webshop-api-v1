@@ -6,40 +6,46 @@ using V1.Repositories;
 
 namespace V1.Tests.Repositories
 {
+    /// <summary>
+    /// Unit tests for the UserRepository class.
+    /// </summary>
     public class UserRepositoryTests
     {
         private readonly UserRepository _userRepository;
         private readonly PostgresDbContext _dbContext;
 
+        /// <summary>
+        /// Initializes a new instance of UserRepositoryTests, setting up an in-memory database for testing.
+        /// </summary>
         public UserRepositoryTests()
         {
             DbContextOptions<PostgresDbContext> options = new DbContextOptionsBuilder<PostgresDbContext>()
-                .UseInMemoryDatabase("testDatabase")  // Use In-Memory DB for testing
+                .UseInMemoryDatabase("testDatabase") // Use In-Memory DB for testing
                 .Options;
-            
-            _dbContext = new PostgresDbContext(options);
 
+            _dbContext = new PostgresDbContext(options);
             _userRepository = new UserRepository(_dbContext);
         }
 
+        /// <summary>
+        /// Verifies that UsernameExists returns false when the username is not found in the database.
+        /// </summary>
         [Fact]
         public async Task UsernameExists_ReturnFalse_WhenUsernameIsNotFound()
         {
             // Arrange
-            UserModel user = new()
-            {
-                Username = "not found user",
-                Password = "User1234",
-                Salt = RandomNumberGenerator.GetBytes(1)
-            };
+            string username = "not found user";
 
             // Act
-            bool result = await _userRepository.UsernameExists(user.Username);
+            bool result = await _userRepository.UsernameExists(username);
 
             // Assert
-            Assert.False(result);
+            Assert.False(result, "Expected UsernameExists to return false for a non-existing username.");
         }
 
+        /// <summary>
+        /// Verifies that UsernameExists returns true when the username is found in the database.
+        /// </summary>
         [Fact]
         public async Task UsernameExists_ReturnTrue_WhenUsernameIsFound()
         {
@@ -48,7 +54,7 @@ namespace V1.Tests.Repositories
             {
                 Username = "found user",
                 Password = "User1234",
-                Salt = RandomNumberGenerator.GetBytes(1)
+                Salt = RandomNumberGenerator.GetBytes(16)
             };
             await _userRepository.CreateUser(user);
 
@@ -56,9 +62,12 @@ namespace V1.Tests.Repositories
             bool result = await _userRepository.UsernameExists(user.Username);
 
             // Assert
-            Assert.True(result);
+            Assert.True(result, "Expected UsernameExists to return true for an existing username.");
         }
 
+        /// <summary>
+        /// Verifies that CreateUser successfully adds a user to the database.
+        /// </summary>
         [Fact]
         public async Task CreateUser_AddUserToDatabase()
         {
@@ -67,7 +76,7 @@ namespace V1.Tests.Repositories
             {
                 Username = "new user",
                 Password = "user",
-                Salt = RandomNumberGenerator.GetBytes(1)
+                Salt = RandomNumberGenerator.GetBytes(16)
             };
 
             // Act
@@ -75,13 +84,13 @@ namespace V1.Tests.Repositories
 
             // Assert
             UserModel? userInDb = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == "new user");
-            
+
             Assert.NotNull(userInDb);
             Assert.Equal(newUser.Username, userInDb?.Username);
             Assert.Equal(newUser.Password, userInDb?.Password);
-            Assert.Equal(newUser.Salt, userInDb?.Salt);
+
+            byte[] saltInDb = userInDb?.Salt ?? [];
+            Assert.True(newUser.Salt.SequenceEqual(saltInDb), "Expected the salt to match between the created user and the database entry.");
         }
     }
-
-
 }

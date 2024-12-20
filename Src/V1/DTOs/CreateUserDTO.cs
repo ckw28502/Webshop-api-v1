@@ -25,8 +25,7 @@ namespace V1.DTOs
         /// - Contain at least one lowercase letter
         /// - Contain at least one number
         /// </summary>
-        [Required(ErrorMessage = "Password is required.")]
-        [PasswordValidation(ErrorMessage = "Password must meet the required criteria.")]
+        [PasswordValidation()]
         public required string Password { get; set; }
     }
 }

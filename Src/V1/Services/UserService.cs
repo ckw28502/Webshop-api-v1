@@ -26,7 +26,7 @@
                 // Check if the username already exists
                 if (await _userRepository.UsernameExists(request.Username))
                 {
-                    throw new Exception("USER_USERNAME_EXISTS");
+                    throw new InvalidOperationException("USER_USERNAME_EXISTS");
                 }
 
                 // Hash the password
