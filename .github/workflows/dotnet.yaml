@@ -57,9 +57,6 @@ jobs:
       - name: Restore dependencies for tests
         run: dotnet restore ${{ env.TEST_PROJECT_PATH }}
 
-      - name: Install dotnet-coverage
-        run: dotnet tool install --global dotnet-coverage
-
       - name: Build tests project
         run: dotnet build ${{ env.TEST_PROJECT_PATH }} --configuration Release
 
@@ -97,6 +94,8 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Install dotnet-coverage
+        run: dotnet tool install --global dotnet-coverage
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
