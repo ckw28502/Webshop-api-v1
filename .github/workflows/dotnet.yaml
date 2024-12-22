@@ -26,7 +26,7 @@ jobs:
           dotnet-version: '9.0'
 
       - name: Restore dependencies for API
-        run: dotnet restore ./src/V1
+        run: dotnet restore ./Src/V1
 
       - name: Build API project
         run: dotnet build ./src/V1 --configuration Release
