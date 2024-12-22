@@ -1,5 +1,5 @@
 using Moq;
-using V1.Tests.TestUtilities.CustomWebApplicationFactory;
+using V1.Tests.TestUtilities;
 
 namespace V1.Tests.Controllers
 {

@@ -76,6 +76,9 @@ namespace V1.Tests.Controllers.UserControllerTests
             // Assert: Check if the response contains the expected error message.
             string errorMessage = await response.Content.ReadAsStringAsync();
             Assert.Contains(expectedErrorMessage, errorMessage);
+
+            // Assert: Verify that the RegisterUser method was never called.
+            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDTO>()), Times.Never);
         }
 
         /// <summary>

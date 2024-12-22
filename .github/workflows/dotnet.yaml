@@ -1,0 +1,54 @@
+name: Build, Test, and Deploy ASP.NET Core API
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_api:
+    runs-on: ubuntu-latest  # You can choose windows-latest or macos-latest as per your needs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0'  # Modify this to match your .NET version
+
+      - name: Restore dependencies for API
+        run: dotnet restore ./src/V1
+
+      - name: Build API project
+        run: dotnet build ./src/V1 --configuration Release
+
+      - name: Run tests for API project
+        run: dotnet test ./src/V1 --configuration Release
+
+  build_tests:
+    runs-on: ubuntu-latest  # You can choose windows-latest or macos-latest as per your needs
+    needs: build_api  # Ensure the API build completes before testing
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0'  # Modify this to match your .NET version
+
+      - name: Restore dependencies for tests
+        run: dotnet restore ./tests/V1.Tests
+
+      - name: Build tests project
+        run: dotnet build ./tests/V1.Tests --configuration Release
+
+      - name: Run tests
+        run: dotnet test ./tests/V1.Tests --configuration Release

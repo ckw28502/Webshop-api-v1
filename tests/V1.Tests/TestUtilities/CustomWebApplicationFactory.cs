@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace V1.Tests.TestUtilities.CustomWebApplicationFactory
+namespace V1.Tests.TestUtilities
 {
     /// <summary>
     /// A generic web application factory that allows dynamic injection of service mocks for testing purposes.

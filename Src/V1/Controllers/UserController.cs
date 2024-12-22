@@ -27,7 +27,7 @@ namespace V1.Controllers
             try
             {
                 await _userService.RegisterUser(request);
-                return CreatedAtAction(nameof(Register), new { username = request.Username });
+                return CreatedAtAction(nameof(Register), null);
             }
             catch (Exception ex)
             {
