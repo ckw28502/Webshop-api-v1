@@ -38,6 +38,9 @@ namespace V1.Tests.Controllers
         /// </summary>
         public ControllerTests()
         {
+            // Set environment variable for testing
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+
             // Create a mock instance of the service passed as a generic parameter.
             _serviceMock = new Mock<TService>();
 

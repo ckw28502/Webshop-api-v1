@@ -17,7 +17,7 @@ builder.Services.AddOpenApi();
 
 // Add PostgreSQL connection string from env
 string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
-if (string.IsNullOrEmpty(connectionString))
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException("PostgreSQL connection string is not set");
 }
