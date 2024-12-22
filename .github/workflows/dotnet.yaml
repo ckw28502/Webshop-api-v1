@@ -20,7 +20,7 @@ jobs:
       artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
 
     env:
-      PROJECT_PATH: './Src/V1'
+      PROJECT_PATH: './src/V1'
 
     steps:
       - name: Checkout code
