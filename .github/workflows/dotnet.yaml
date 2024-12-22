@@ -36,7 +36,10 @@ jobs:
 
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
-        uses: actions/upload-artifact@v3
+      
+      - name: Upload project artifact for next job
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
         with:
           name: api-project
           path: ./src/V1
