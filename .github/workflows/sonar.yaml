@@ -45,11 +45,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          PROJECT_PATH: './src/V1'
-          TEST_PROJECT_PATH: './tests/V1.Tests'
+          PROJECT_PATH: './V1'
+          TEST_PROJECT_PATH: './V1.Tests'
+          EXCLUDED_FILE: "**/migrations/**,**/Program.cs"
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml /d:sonar.scanner.scanAll=false /d:"sonar.verbose=true"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml /d:sonar.scanner.scanAll=false /d:"sonar.verbose=true" /d:sonar.coverage.exclusions=${{ env.EXCLUDED_FILE }}
           dotnet build ${{ env.PROJECT_PATH }} --no-incremental
           dotnet-coverage collect "dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release" -f xml -o "coverage.xml" 
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
