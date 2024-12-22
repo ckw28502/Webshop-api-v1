@@ -10,6 +10,8 @@ namespace V1
 {
     public class Program
     {
+        protected Program() { }
+
         private static async Task Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

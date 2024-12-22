@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-      PROJECT_PATH: './src/V1'
+      PROJECT_PATH: './V1'
 
     steps:
       - name: Checkout code
@@ -41,7 +41,7 @@ jobs:
     needs: build
 
     env:
-      TEST_PROJECT_PATH: './tests/V1.Tests'
+      TEST_PROJECT_PATH: './V1.Tests'
 
     steps:
       - name: Checkout code

@@ -20,11 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\V1\V1.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="V1" />
+    <ProjectReference Include="..\V1\V1.csproj" />
   </ItemGroup>
 
 </Project>
