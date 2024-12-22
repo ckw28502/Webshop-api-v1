@@ -97,5 +97,5 @@ jobs:
         run: |
           cd ${{ secrets.PROJECT_PATH }}
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
+          dotnet build ${{ env.PROJECT_PATH }}
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
