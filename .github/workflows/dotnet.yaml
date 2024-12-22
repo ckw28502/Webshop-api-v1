@@ -11,16 +11,18 @@ on:
 
 jobs:
   build_api:
-    runs-on: ubuntu-latest  # You can choose windows-latest or macos-latest as per your needs
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Check directory
+        run: ls
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0'  # Modify this to match your .NET version
+          dotnet-version: '9.0'
 
       - name: Restore dependencies for API
         run: dotnet restore ./src/V1
@@ -32,8 +34,8 @@ jobs:
         run: dotnet test ./src/V1 --configuration Release
 
   build_tests:
-    runs-on: ubuntu-latest  # You can choose windows-latest or macos-latest as per your needs
-    needs: build_api  # Ensure the API build completes before testing
+    runs-on: ubuntu-latest
+    needs: build_api
 
     steps:
       - name: Checkout code
@@ -42,7 +44,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0'  # Modify this to match your .NET version
+          dotnet-version: '9.0'
 
       - name: Restore dependencies for tests
         run: dotnet restore ./tests/V1.Tests
