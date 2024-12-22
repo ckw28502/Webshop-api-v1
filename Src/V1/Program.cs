@@ -53,3 +53,8 @@ app.UseMiddleware<SecurityHeaderMiddleware>();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+    
+}

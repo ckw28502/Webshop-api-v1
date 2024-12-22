@@ -1,34 +1,29 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-using V1.Data;
 using V1.Models;
 using V1.Repositories;
 
 namespace V1.Tests.Repositories
 {
     /// <summary>
-    /// Unit tests for the UserRepository class.
+    /// Unit tests for the UserRepository class, responsible for testing database operations
+    /// related to user management.
     /// </summary>
-    public class UserRepositoryTests
+    public class UserRepositoryTests : RepositoryTests
     {
         private readonly UserRepository _userRepository;
-        private readonly PostgresDbContext _dbContext;
 
         /// <summary>
-        /// Initializes a new instance of UserRepositoryTests, setting up an in-memory database for testing.
+        /// Initializes a new instance of the UserRepositoryTests class, setting up the UserRepository
+        /// with an in-memory database to ensure isolated and repeatable tests.
         /// </summary>
-        public UserRepositoryTests()
+        public UserRepositoryTests() : base()
         {
-            DbContextOptions<PostgresDbContext> options = new DbContextOptionsBuilder<PostgresDbContext>()
-                .UseInMemoryDatabase("testDatabase") // Use In-Memory DB for testing
-                .Options;
-
-            _dbContext = new PostgresDbContext(options);
             _userRepository = new UserRepository(_dbContext);
         }
 
         /// <summary>
-        /// Verifies that UsernameExists returns false when the username is not found in the database.
+        /// Tests that UsernameExists returns false when the specified username does not exist in the database.
         /// </summary>
         [Fact]
         public async Task UsernameExists_ReturnFalse_WhenUsernameIsNotFound()
@@ -44,7 +39,7 @@ namespace V1.Tests.Repositories
         }
 
         /// <summary>
-        /// Verifies that UsernameExists returns true when the username is found in the database.
+        /// Tests that UsernameExists returns true when the specified username exists in the database.
         /// </summary>
         [Fact]
         public async Task UsernameExists_ReturnTrue_WhenUsernameIsFound()
@@ -66,7 +61,7 @@ namespace V1.Tests.Repositories
         }
 
         /// <summary>
-        /// Verifies that CreateUser successfully adds a user to the database.
+        /// Tests that CreateUser successfully inserts a new user record into the database.
         /// </summary>
         [Fact]
         public async Task CreateUser_AddUserToDatabase()
