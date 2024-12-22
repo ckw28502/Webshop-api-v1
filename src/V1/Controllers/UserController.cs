@@ -22,7 +22,7 @@ namespace V1.Controllers
         /// <response code="201">Successfully created the user.</response>
         /// <response code="400">Bad request, such as validation errors or missing data.</response>
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody]CreateUserDTO request)
+        public async Task<IActionResult> Register([FromBody]CreateUserDto request)
         {
             try
             {

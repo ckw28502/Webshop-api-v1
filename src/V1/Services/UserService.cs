@@ -21,7 +21,7 @@
             /// <param name="createUserDto">The data transfer object containing the user's registration information.</param>
             /// <returns>A task representing the asynchronous operation.</returns>
             /// <exception cref="Exception">Thrown if the username is already taken.</exception>
-            public async Task RegisterUser(CreateUserDTO request)
+            public async Task RegisterUser(CreateUserDto request)
             {
                 // Check if the username already exists
                 if (await _userRepository.UsernameExists(request.Username))
