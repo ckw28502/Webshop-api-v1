@@ -32,6 +32,12 @@ jobs:
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
 
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ${{ env.PROJECT_PATH }}/bin/Release/net9.0
+
   test:
     runs-on: ubuntu-22.04
     needs: build
@@ -51,14 +57,22 @@ jobs:
       - name: Restore dependencies for tests
         run: dotnet restore ${{ env.TEST_PROJECT_PATH }}
 
+      - name: Install dotnet-coverage
+        run: dotnet tool install --global dotnet-coverage
+
       - name: Build tests project
         run: dotnet build ${{ env.TEST_PROJECT_PATH }} --configuration Release
 
       - name: Run tests
-        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release
+        run: dotnet-coverage collect "dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release" -f xml -o "coverage.xml"
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ./coverage.xml
 
   sonar:
-    name: Build and analyze
     needs: test
     runs-on: windows-latest
     steps:
@@ -97,5 +111,4 @@ jobs:
         run: |
           cd ${{ secrets.PROJECT_PATH }}
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build ${{ env.PROJECT_PATH }}
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
