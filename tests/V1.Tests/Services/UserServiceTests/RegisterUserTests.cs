@@ -12,15 +12,15 @@ namespace V1.Tests.Services.UserServiceTests
         /// <summary>
         /// Test input data for creating a user, initialized with a valid username and password.
         /// </summary>
-        private readonly CreateUserDTO _request;
+        private readonly CreateUserDto _request;
 
         /// <summary>
         /// Initializes the test setup with test data for user registration.
         /// </summary>
         public RegisterUserTests()
         {
-            // Initialize the CreateUserDTO with sample input data
-            _request = new CreateUserDTO
+            // Initialize the CreateUserDto with sample input data
+            _request = new CreateUserDto
             {
                 Username = "user",
                 Password = "User1234"

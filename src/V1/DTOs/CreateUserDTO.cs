@@ -7,7 +7,7 @@ namespace V1.DTOs
     /// Data Transfer Object (DTO) for creating a new user.
     /// Contains validation rules for user creation input.
     /// </summary>
-    public class CreateUserDTO
+    public class CreateUserDto
     {
         /// <summary>
         /// Gets or sets the unique username for the user.

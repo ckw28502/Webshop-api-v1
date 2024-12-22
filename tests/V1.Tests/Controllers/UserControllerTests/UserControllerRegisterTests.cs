@@ -13,17 +13,17 @@ namespace V1.Tests.Controllers.UserControllerTests
     public class UserControllerRegisterTests : ControllerTests<IUserService>
     {
         /// <summary>
-        /// A valid CreateUserDTO object used for testing successful user creation.
+        /// A valid CreateUserDto object used for testing successful user creation.
         /// </summary>
-        private readonly CreateUserDTO _validRequest;
+        private readonly CreateUserDto _validRequest;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControllerRegisterTests"/> class.
-        /// Sets up the test with a valid CreateUserDTO request.
+        /// Sets up the test with a valid CreateUserDto request.
         /// </summary>
         public UserControllerRegisterTests() : base()
         {
-            _validRequest = new CreateUserDTO
+            _validRequest = new CreateUserDto
             {
                 Username = "user",
                 Password = "User1234"
@@ -31,10 +31,10 @@ namespace V1.Tests.Controllers.UserControllerTests
         }
 
         /// <summary>
-        /// Provides test data for invalid CreateUserDTO inputs.
+        /// Provides test data for invalid CreateUserDto inputs.
         /// This is used for testing various validation error scenarios when the user input is incorrect.
         /// </summary>
-        public static TheoryData<string, string, string> GetInvalidCreateUserDTOs
+        public static TheoryData<string, string, string> GetInvalidCreateUserDtos
         {
             get
             {
@@ -59,7 +59,7 @@ namespace V1.Tests.Controllers.UserControllerTests
         /// <param name="password">The password input to be tested.</param>
         /// <param name="expectedErrorMessage">The expected error message in the response.</param>
         [Theory]
-        [MemberData(nameof(GetInvalidCreateUserDTOs))]
+        [MemberData(nameof(GetInvalidCreateUserDtos))]
         public async Task CreateUser_ShouldReturnBadRequest_WhenInvalidDTOIsProvided(
             string username, string password, string expectedErrorMessage
         )
@@ -78,7 +78,7 @@ namespace V1.Tests.Controllers.UserControllerTests
             Assert.Contains(expectedErrorMessage, errorMessage);
 
             // Assert: Verify that the RegisterUser method was never called.
-            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDTO>()), Times.Never);
+            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDto>()), Times.Never);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace V1.Tests.Controllers.UserControllerTests
             // Arrange: Set up the service mock to throw an exception when attempting to register a user.
             string expectedErrorMessage = "service error";
             _serviceMock
-                .Setup(service => service.RegisterUser(It.IsAny<CreateUserDTO>()))
+                .Setup(service => service.RegisterUser(It.IsAny<CreateUserDto>()))
                 .ThrowsAsync(new Exception(expectedErrorMessage));
 
             // Act: Send the POST request with a valid user creation DTO.
@@ -105,7 +105,7 @@ namespace V1.Tests.Controllers.UserControllerTests
             Assert.True(errorMessage.Contains("service error"), $"Error message was: {errorMessage}");
 
             // Assert: Verify that the RegisterUser method was called exactly once.
-            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDTO>()), Times.Once);
+            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDto>()), Times.Once);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace V1.Tests.Controllers.UserControllerTests
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             // Assert: Verify that the RegisterUser method was called exactly once.
-            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDTO>()), Times.Once);
+            _serviceMock.Verify(service => service.RegisterUser(It.IsAny<CreateUserDto>()), Times.Once);
         }
     }
 }

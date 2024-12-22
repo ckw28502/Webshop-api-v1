@@ -12,6 +12,6 @@ namespace V1.Services
         /// </summary>
         /// <param name="request">The user data required for registration.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task RegisterUser(CreateUserDTO request);
+        Task RegisterUser(CreateUserDto request);
     }
 }

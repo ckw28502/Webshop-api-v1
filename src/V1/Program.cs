@@ -6,55 +6,59 @@ using V1.Repositories;
 using V1.Services;
 using V1.Utils;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-// Load env
-Env.Load();
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-// Add PostgreSQL connection string from env
-string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
+namespace V1
 {
-    throw new InvalidOperationException("PostgreSQL connection string is not set");
-}
+    public class Program
+    {
+        private static async Task Main(string[] args)
+        {
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add connection string to db context
-builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(connectionString));
+            // Load env
+            Env.Load();
 
-// Register utils services
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+            // Add services to the container.
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            builder.Services.AddOpenApi();
 
-// Register repositories for Dependency Injection
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+            // Add PostgreSQL connection string from env
+            string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("PostgreSQL connection string is not set");
+            }
 
-// Register services for Dependency Injection
-builder.Services.AddScoped<IUserService, UserService>();
+            // Add connection string to db context
+            builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(connectionString));
 
-// Register the controllers
-builder.Services.AddControllers();
+            // Register utils services
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-WebApplication app = builder.Build();
+            // Register repositories for Dependency Injection
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseDeveloperExceptionPage();
-}
+            // Register services for Dependency Injection
+            builder.Services.AddScoped<IUserService, UserService>();
 
-app.UseHttpsRedirection();
-app.UseHsts();
-app.UseMiddleware<SecurityHeaderMiddleware>();
+            // Register the controllers
+            builder.Services.AddControllers();
 
-app.MapControllers();
+            WebApplication app = builder.Build();
 
-app.Run();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+                app.UseDeveloperExceptionPage();
+            }
 
-public partial class Program
-{
-    
+            app.UseHttpsRedirection();
+            app.UseHsts();
+            app.UseMiddleware<SecurityHeaderMiddleware>();
+
+            app.MapControllers();
+
+            await app.RunAsync();
+        }
+    }
 }

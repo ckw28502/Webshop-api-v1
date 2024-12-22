@@ -7,6 +7,7 @@ namespace V1.Attributes
     /// Custom validation attribute to enforce password validation.
     /// Validates that the password meets certain security criteria.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public partial class PasswordValidationAttribute : ValidationAttribute
     {
         /// <summary>

@@ -12,7 +12,7 @@ namespace V1.Utils
         /// The method uses a cryptographic algorithm to generate a secure hash
         /// and a salt for the password.
         /// </summary>
-        /// <param name="plainPassword">The plain password to be hashed.</param>
+        /// <param name="password">The plain password to be hashed.</param>
         /// <returns>
         /// A tuple containing:
         /// - A <see cref="byte[]"/> representing the salt used in the hashing process.
@@ -22,6 +22,6 @@ namespace V1.Utils
         /// The salt should be stored securely in the database to ensure each password is hashed with a unique value,
         /// even if users share the same password. This method employs the PBKDF2 algorithm with HMACSHA256.
         /// </remarks>
-        (byte[] salt, string hashedPassword) HashPassword(string plainPassword);
+        (byte[] salt, string hashedPassword) HashPassword(string password);
     }
 }
