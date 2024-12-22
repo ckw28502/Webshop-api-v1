@@ -16,9 +16,6 @@ jobs:
   build_api:
     runs-on: ubuntu-latest
 
-    outputs:
-      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
-
     env:
       PROJECT_PATH: './src/V1'
 
@@ -36,13 +33,6 @@ jobs:
 
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
-      
-      - name: Upload project artifact for next job
-        id: upload-artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-project
-          path: ./src/V1
 
   build_tests:
     runs-on: ubuntu-latest
@@ -60,8 +50,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
-      - name: List files in repository
-        run: ls -R
+      - name: Create .env file from secret
+        run: echo "${{ secrets.env }}" > ./src/V1/.env
 
       - name: Restore dependencies for tests
         run: dotnet restore ${{ env.TEST_PROJECT_PATH }}
