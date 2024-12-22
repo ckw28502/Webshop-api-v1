@@ -13,7 +13,7 @@ env:
   DOTNET_VERSION: '9.0'
 
 jobs:
-  build_api:
+  build:
     runs-on: ubuntu-22.04
 
     env:
@@ -34,9 +34,9 @@ jobs:
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
 
-  build_tests:
+  test:
     runs-on: ubuntu-22.04
-    needs: build_api
+    needs: build
 
     env:
       TEST_PROJECT_PATH: './tests/V1.Tests'
@@ -61,6 +61,7 @@ jobs:
 
   sonar:
     name: Build and analyze
+    needs: test
     runs-on: windows-latest
     steps:
       - name: Set up JDK 17
@@ -96,6 +97,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1/src/V1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
