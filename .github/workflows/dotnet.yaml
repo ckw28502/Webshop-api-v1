@@ -14,7 +14,7 @@ env:
 
 jobs:
   build_api:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       PROJECT_PATH: './src/V1'
@@ -35,7 +35,7 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
 
   build_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: build_api
 
     env:
@@ -51,7 +51,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
       - name: Create .env file from secret
-        run: echo "${{ secrets.env }}" > ./src/V1/.env
+        run: echo "${{ secrets.ENV_VALUES }}" > ./src/V1/.env
 
       - name: Restore dependencies for tests
         run: dotnet restore ${{ env.TEST_PROJECT_PATH }}
