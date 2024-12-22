@@ -11,13 +11,11 @@ on:
 
 env:
   DOTNET_VERSION: '9.0'
+  PROJECT_PATH: './src/V1'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-
-    env:
-      PROJECT_PATH: './src/V1'
 
     steps:
       - name: Checkout code
@@ -98,5 +96,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          cd ${{ secrets.PROJECT_PATH }}
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

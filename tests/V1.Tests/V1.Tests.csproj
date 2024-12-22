@@ -23,13 +23,6 @@
     <ProjectReference Include="..\..\src\V1\V1.csproj" />
   </ItemGroup>
 
-  <!-- <ItemGroup>
-    <Content Include="..\..\src\V1\.env">
-      <Link>.env</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup> -->
-
   <ItemGroup>
     <InternalsVisibleTo Include="V1" />
   </ItemGroup>
