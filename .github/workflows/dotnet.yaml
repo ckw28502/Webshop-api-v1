@@ -23,9 +23,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check directory
-        run: ls -la
-
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
@@ -36,9 +33,6 @@ jobs:
 
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
-
-      - name: Run tests for API project
-        run: dotnet test ${{ env.PROJECT_PATH }} --configuration Release
 
   build_tests:
     runs-on: ubuntu-latest
