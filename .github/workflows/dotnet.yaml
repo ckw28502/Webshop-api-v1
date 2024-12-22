@@ -14,10 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check directory
-        run: ls
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Check directory
+        run: ls -la
 
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
