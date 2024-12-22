@@ -16,6 +16,9 @@ jobs:
   build_api:
     runs-on: ubuntu-latest
 
+    outputs:
+      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
+
     env:
       PROJECT_PATH: './Src/V1'
 
@@ -33,6 +36,10 @@ jobs:
 
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-project
+          path: ./src/V1
 
   build_tests:
     runs-on: ubuntu-latest
