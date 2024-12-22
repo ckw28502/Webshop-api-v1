@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SonarQubeTestProject>false</SonarQubeTestProject>
+  </PropertyGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="V1.Tests" />
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
