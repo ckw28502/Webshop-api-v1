@@ -23,6 +23,26 @@ namespace V1
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            // Add CORS policy
+            builder.Services.AddCors( options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    string? frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
+
+                    // Ensure the frontend URL is provided
+                    if (string.IsNullOrEmpty(frontendUrl))
+                    {
+                        throw new InvalidOperationException("Frontend URL is not set");
+                    }
+
+                    // Allow CORS from the specified frontend URL
+                    policy.WithOrigins(frontendUrl)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             // Add PostgreSQL connection string from env
             string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
@@ -53,6 +73,8 @@ namespace V1
                 app.MapOpenApi();
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
             app.UseHsts();
