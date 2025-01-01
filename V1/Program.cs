@@ -23,35 +23,32 @@ namespace V1
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            // Get environment variables
-            string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
-            string? frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
-
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test")
-            {
-                if (string.IsNullOrEmpty(connectionString))
-                {
-                    throw new InvalidOperationException("PostgreSQL connection string is not set");
-                }
-
-                if (string.IsNullOrEmpty(frontendUrl))
-                {
-                    throw new InvalidOperationException("Frontend URL is not set");
-                }
-            }
-
             // Add CORS policy
             builder.Services.AddCors( options =>
             {
-                options.AddDefaultPolicy(
-                    policy =>
+                options.AddDefaultPolicy(policy =>
+                {
+                    string? frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
+
+                    // Ensure the frontend URL is provided
+                    if (string.IsNullOrEmpty(frontendUrl))
                     {
-                        policy.WithOrigins(frontendUrl)
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
+                        throw new InvalidOperationException("Frontend URL is not set");
                     }
-                );
+
+                    // Allow CORS from the specified frontend URL
+                    policy.WithOrigins(frontendUrl)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
+
+            // Add PostgreSQL connection string from env
+            string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("PostgreSQL connection string is not set");
+            }
 
             // Add connection string to db context
             builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(connectionString));
