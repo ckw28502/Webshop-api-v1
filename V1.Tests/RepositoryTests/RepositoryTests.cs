@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using V1.Data;
 
-namespace V1.Tests.Repositories
+namespace V1.Tests.RepositoryTests
 {
     /// <summary>
     /// Base class for repository tests that sets up an in-memory database context.

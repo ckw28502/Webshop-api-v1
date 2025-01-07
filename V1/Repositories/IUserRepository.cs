@@ -16,6 +16,16 @@ namespace V1.Repositories
         Task<bool> UsernameExists(string username);
 
         /// <summary>
+        /// Checks if the given email already exists in the system.
+        /// </summary>
+        /// <param name="email">The email to check for availability.</param>
+        /// <returns>
+        /// A task representing the asynchronous operation. 
+        /// The task result is a boolean indicating whether the email exists.
+        /// </returns>
+        Task<bool> EmailExists(string email);
+
+        /// <summary>
         /// Creates a new user in the system.
         /// </summary>
         /// <param name="user">The user object to be created.</param>

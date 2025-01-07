@@ -23,6 +23,14 @@ namespace V1.Models
         public required string Username { get; set; }
 
         /// <summary>
+        /// Gets or sets the email address for the user.
+        /// The email is required and must be a valid email format.
+        /// </summary>
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        public required string Email { get; set; }
+
+        /// <summary>
         /// Gets or sets the user's password.
         /// The password must meet a custom set of requirements enforced by the <see cref="PasswordValidationAttribute"/>.
         /// </summary>

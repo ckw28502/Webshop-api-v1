@@ -1,4 +1,4 @@
-namespace V1.Tests.Services
+namespace V1.Tests.ServiceTests
 {
     /// <summary>
     /// Base class for all service tests, handling the setup, cleanup, and mock verification logic for all service-based tests.

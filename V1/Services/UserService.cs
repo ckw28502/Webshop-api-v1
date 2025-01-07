@@ -26,7 +26,13 @@
                 // Check if the username already exists
                 if (await _userRepository.UsernameExists(request.Username))
                 {
-                    throw new InvalidOperationException("USER_USERNAME_EXISTS");
+                    throw new InvalidOperationException("USERNAME_EXISTS");
+                }
+
+                // Check if the email already exists
+                if (await _userRepository.EmailExists(request.Email))
+                {
+                    throw new InvalidOperationException("EMAIL_EXISTS");
                 }
 
                 // Hash the password
@@ -36,6 +42,7 @@
                 UserModel user = new()
                 {
                     Username = request.Username,
+                    Email = request.Email,
                     Password = hashedPassword,
                     Salt = salt
                 };

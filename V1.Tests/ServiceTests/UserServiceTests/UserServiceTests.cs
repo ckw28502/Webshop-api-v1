@@ -3,7 +3,7 @@ using V1.Repositories;
 using V1.Services;
 using V1.Utils;
 
-namespace V1.Tests.Services.UserServiceTests
+namespace V1.Tests.ServiceTests.UserServiceTests
 {
     /// <summary>
     /// Unit tests for the <see cref="UserService"/> class, focusing on the user-related logic.
