@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using V1.Utils;
+using V1.Utils.PasswordHasher;
 
-namespace V1.Tests.Utils
+namespace V1.Tests.UtilTests
 {
     /// <summary>
     /// Unit tests for the PasswordHasher utility class.

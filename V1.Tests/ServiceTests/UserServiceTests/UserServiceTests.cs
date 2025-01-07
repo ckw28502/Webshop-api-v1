@@ -1,7 +1,7 @@
 using Moq;
 using V1.Repositories;
 using V1.Services;
-using V1.Utils;
+using V1.Utils.PasswordHasher;
 
 namespace V1.Tests.ServiceTests.UserServiceTests
 {

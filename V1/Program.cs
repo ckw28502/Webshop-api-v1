@@ -4,7 +4,7 @@ using V1.Data;
 using V1.Middlewares;
 using V1.Repositories;
 using V1.Services;
-using V1.Utils;
+using V1.Utils.PasswordHasher;
 
 namespace V1
 {

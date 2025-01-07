@@ -1,4 +1,4 @@
-namespace V1.Utils
+namespace V1.Utils.PasswordHasher
 {
     /// <summary>
     /// Defines the contract for a password hashing service.

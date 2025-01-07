@@ -1,7 +1,7 @@
     using V1.DTOs;
     using V1.Models;
     using V1.Repositories;
-    using V1.Utils;
+    using V1.Utils.PasswordHasher;
 
     namespace V1.Services
     {
