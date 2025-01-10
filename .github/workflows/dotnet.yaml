@@ -30,12 +30,6 @@ jobs:
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: ${{ env.PROJECT_PATH }}/bin/Release/net9.0
-
   test:
     runs-on: ubuntu-22.04
 
