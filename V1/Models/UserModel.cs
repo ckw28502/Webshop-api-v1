@@ -31,6 +31,11 @@ namespace V1.Models
         public required string Email { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the user's email has been verified.
+        /// </summary>
+        public bool IsEmailVerified { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets the user's password.
         /// The password must meet a custom set of requirements enforced by the <see cref="PasswordValidationAttribute"/>.
         /// </summary>

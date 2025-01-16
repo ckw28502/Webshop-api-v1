@@ -5,13 +5,17 @@ using V1.Models;
 namespace V1.Repositories
 {
     /// <summary>
-    /// Implementation of the <see cref="IUserRepository"/> interface for interacting with user data in the database.
-    /// Provides methods for performing CRUD operations related to users.
+    /// Implements the contract for the User repository, including operations related to user data management.
+    /// This repository inherits from the <see cref="Repository"/> class and implements the <see cref="IUserRepository"/> interface.
+    /// It provides functionality to check if a username or email exists, and to create a new user in the database.
     /// </summary>
-    /// <param name="context">The database context used to interact with the database.</param>
-    public class UserRepository(PostgresDbContext context) : IUserRepository
+    public class UserRepository : Repository, IUserRepository
     {
-        private readonly PostgresDbContext _context = context;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserRepository"/> class.
+        /// </summary>
+        /// <param name="context">The <see cref="PostgresDbContext"/> instance used for database operations.</param>
+        public UserRepository(PostgresDbContext context) : base(context) { }
 
         /// <summary>
         /// Checks if the given username already exists in the database.

@@ -31,6 +31,11 @@ namespace V1.Tests.ServiceTests.UserServiceTests
         /// <summary>
         /// Tests that an exception is thrown when attempting to create a user with a username that already exists.
         /// </summary>
+        /// <remarks>
+        /// This test simulates a scenario where the username provided by the user already exists in the repository.
+        /// The test verifies that an exception is thrown with the correct error code ("USERNAME_EXISTS") and ensures
+        /// that no further repository methods are called after the failure.
+        /// </remarks>
         [Fact]
         public async Task CreateUser_ShouldThrowException_WhenUsernameAlreadyExists()
         {
@@ -60,11 +65,19 @@ namespace V1.Tests.ServiceTests.UserServiceTests
 
             // Verify that the CreateUser method was never called
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Never);
+
+            // Verify that the email was never sent
+            _emailSenderMock.Verify(mailSender => mailSender.SendEmail(_request.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when attempting to create a user with an email that already exists.
         /// </summary>
+        /// <remarks>
+        /// This test simulates a scenario where the email provided by the user already exists in the repository.
+        /// The test verifies that an exception is thrown with the correct error code ("EMAIL_EXISTS") and ensures
+        /// that no further repository methods are called after the failure.
+        /// </remarks>
         [Fact]
         public async Task CreateUser_ShouldThrowException_WhenEmailAlreadyExists()
         {
@@ -99,15 +112,22 @@ namespace V1.Tests.ServiceTests.UserServiceTests
 
             // Verify that the CreateUser method was never called
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Never);
+
+            // Verify that the email was never sent
+            _emailSenderMock.Verify(mailSender => mailSender.SendEmail(_request.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         /// <summary>
         /// Tests that a user is successfully created when the username and email are valid and available.
         /// </summary>
+        /// <remarks>
+        /// This test simulates a successful user registration where the username and email are available.
+        /// The test verifies that the user is created, password hashing is done, and an email is sent.
+        /// It also ensures that the repository methods for checking availability and creating the user are called as expected.
+        /// </remarks>
         [Fact]
         public async Task CreateUser_ShouldCreateUser_WhenRequestIsValid()
         {
-            // Arrange
             // Simulate that the username does not already exist in the repository
             _userRepositoryMock
                 .Setup(repo => repo.UsernameExists(_request.Username))
@@ -118,8 +138,13 @@ namespace V1.Tests.ServiceTests.UserServiceTests
                 .Setup(repo => repo.EmailExists(_request.Email))
                 .ReturnsAsync(false);
 
-            // Simulate the password hashing process with predefined salt and hashed password
-            byte[] salt = { 1, 2, 3, 4 }; // Sample salt for hashing
+            // Mock StartTransaction to return a mock transaction
+            _userRepositoryMock
+                .Setup(repo => repo.StartTransaction())
+                .ReturnsAsync(mockTransaction.Object);
+
+            // Simulate the password hashing process
+            byte[] salt = [1, 2, 3, 4];  // Sample salt for hashing
             string hashedPassword = "hashed password";
 
             _passwordHasherMock
@@ -127,7 +152,6 @@ namespace V1.Tests.ServiceTests.UserServiceTests
                 .Returns((salt, hashedPassword));
 
             // Act
-            // Call the RegisterUser method with valid input (non-existing username and email)
             await _userService.RegisterUser(_request);
 
             // Assert
@@ -142,6 +166,9 @@ namespace V1.Tests.ServiceTests.UserServiceTests
 
             // Verify that CreateUser was called exactly once to create the new user with the expected data
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Once);
+
+            // Verify that the email was sent once
+            _emailSenderMock.Verify(mailSender => mailSender.SendEmail(_request.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace V1.Repositories
     /// Defines the contract for the User repository, including operations
     /// related to user data management.
     /// </summary>
-    public interface IUserRepository
+    public interface IUserRepository : IRepository
     {
         /// <summary>
         /// Checks if the given username already exists in the system.
