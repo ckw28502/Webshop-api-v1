@@ -12,7 +12,7 @@ namespace V1.Tests.ServiceTests
         /// <summary>
         /// Mock instance of <see cref="IDbContextTransaction"/> to simulate database transactions in service tests.
         /// </summary>
-        protected Mock<IDbContextTransaction> mockTransaction;
+        protected Mock<IDbContextTransaction> _transactionMock;
 
         /// <summary>
         /// Initializes the test setup by creating the mock instances required for tests.
@@ -21,7 +21,7 @@ namespace V1.Tests.ServiceTests
         public ServiceTests()
         {
             // Initialize the mock transaction to simulate database transaction behavior during tests.
-            mockTransaction = new Mock<IDbContextTransaction>();
+            _transactionMock = new Mock<IDbContextTransaction>();
         }
 
         /// <summary>
