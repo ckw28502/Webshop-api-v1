@@ -9,13 +9,12 @@ namespace V1.Repositories
     /// This repository inherits from the <see cref="Repository"/> class and implements the <see cref="IUserRepository"/> interface.
     /// It provides functionality to check if a username or email exists, and to create a new user in the database.
     /// </summary>
-    public class UserRepository : Repository, IUserRepository
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="UserRepository"/> class.
+    /// </remarks>
+    /// <param name="context">The <see cref="PostgresDbContext"/> instance used for database operations.</param>
+    public class UserRepository(PostgresDbContext context) : Repository(context), IUserRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserRepository"/> class.
-        /// </summary>
-        /// <param name="context">The <see cref="PostgresDbContext"/> instance used for database operations.</param>
-        public UserRepository(PostgresDbContext context) : base(context) { }
 
         /// <summary>
         /// Checks if the given username already exists in the database.

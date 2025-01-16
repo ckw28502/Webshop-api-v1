@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore;
 using V1.Models;
 
 namespace V1.Tests.RepositoryTests.UserRepositoryTests
