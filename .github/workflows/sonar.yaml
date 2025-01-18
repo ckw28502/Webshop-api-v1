@@ -11,7 +11,8 @@ on:
 jobs:
   sonar:
     runs-on: windows-latest
-    smtp4dev:
+    services:
+      smtp4dev:
         image: rnwood/smtp4dev
         ports:
           - 25:25       # SMTP port
