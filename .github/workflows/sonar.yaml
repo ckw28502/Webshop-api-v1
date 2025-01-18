@@ -53,6 +53,10 @@ jobs:
           refreshenv
           net start com.docker.service
 
+      - name: Switch Docker to Linux Containers
+        run: |
+          & "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchLinuxEngine
+
       - name: Start smtp4dev
         run: |
           docker pull rnwood/smtp4dev
