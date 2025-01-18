@@ -31,12 +31,6 @@ namespace V1.Utils.EmailSender
         public required string SenderEmail { get; set; }
 
         /// <summary>
-        /// Gets or sets the username for SMTP authentication.
-        /// This is the username used to authenticate the sender with the SMTP server.
-        /// </summary>
-        public required string Username { get; set; }
-
-        /// <summary>
         /// Gets or sets the password for SMTP authentication.
         /// This password is used to authenticate the sender with the SMTP server.
         /// </summary>

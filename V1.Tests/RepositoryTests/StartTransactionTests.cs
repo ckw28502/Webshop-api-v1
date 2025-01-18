@@ -18,7 +18,7 @@ namespace V1.Tests.RepositoryTests
     /// This test class ensures that transactions are correctly initialized within the database context
     /// and that the repository's transaction functionality behaves as expected.
     /// </summary>
-    public class StartTransactionTest
+    public class StartTransactionTests
     {
         /// <summary>
         /// The instance of <see cref="TestRepository"/> used for testing the transaction behavior.
@@ -31,7 +31,7 @@ namespace V1.Tests.RepositoryTests
         /// Initializes the test class by configuring an SQLite in-memory database.
         /// This allows for testing the repository's transaction behavior without needing an actual database.
         /// </summary>
-        public StartTransactionTest()
+        public StartTransactionTests()
         {
             // Configure SQLite in-memory database for testing
             DbContextOptions<PostgresDbContext> options = new DbContextOptionsBuilder<PostgresDbContext>()

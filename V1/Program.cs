@@ -57,7 +57,6 @@ namespace V1
 
             // Load EmailSettings and replace placeholders with environment variables
             builder.Configuration["EmailSettings:SenderEmail"] = Environment.GetEnvironmentVariable("SMTP_EMAIL");
-            builder.Configuration["EmailSettings:Username"] = Environment.GetEnvironmentVariable("SMTP_USERNAME");
             builder.Configuration["EmailSettings:Password"] = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
 
             // Register email settings from configuration

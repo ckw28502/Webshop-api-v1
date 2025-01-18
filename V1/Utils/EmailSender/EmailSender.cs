@@ -66,12 +66,6 @@ namespace V1.Utils.EmailSender
         {
             // Define the path to the email template file.
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate.html");
-            
-            // Check if the template file exists.
-            if (!File.Exists(templatePath))
-            {
-                throw new FileNotFoundException("Email template file not found.", templatePath);   
-            }
 
             // Read the template file as a string.
             string template = await File.ReadAllTextAsync(templatePath);
