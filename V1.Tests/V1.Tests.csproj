@@ -23,15 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\V1\V1.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\V1\Templates\**\*">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <Target Name="CopyTemplates" AfterTargets="Build">
-      <Copy SourceFiles="@(Content)" 
-            DestinationFolder="$(OutDir)Templates\%(RecursiveDir)" />
-  </Target>
 </Project>
