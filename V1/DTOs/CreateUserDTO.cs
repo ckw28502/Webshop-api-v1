@@ -18,6 +18,14 @@ namespace V1.DTOs
         public required string Username { get; set; }
 
         /// <summary>
+        /// Gets or sets the email address for the user.
+        /// The email is required and must be a valid email format.
+        /// </summary>
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        public required string Email { get; set; }
+
+        /// <summary>
         /// Gets or sets the password for the user.
         /// The password must meet the following criteria:
         /// - At least 8 characters in length

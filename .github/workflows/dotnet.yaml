@@ -11,10 +11,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     env:
       PROJECT_PATH: './V1'
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,19 +28,16 @@ jobs:
       - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: ${{ env.PROJECT_PATH }}/bin/Release/net9.0
-
   test:
     runs-on: ubuntu-22.04
-    needs: build
-
+    services:
+      smtp4dev:
+        image: rnwood/smtp4dev
+        ports:
+          - 25:25       # SMTP port
+          - 8080:80   # Web UI/API port
     env:
       TEST_PROJECT_PATH: './V1.Tests'
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

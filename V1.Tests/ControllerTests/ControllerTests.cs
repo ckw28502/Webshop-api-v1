@@ -1,7 +1,7 @@
 using Moq;
 using V1.Tests.TestUtilities;
 
-namespace V1.Tests.Controllers
+namespace V1.Tests.ControllerTests
 {
     /// <summary>
     /// Base test class for controller tests, providing the necessary setup for integration testing.

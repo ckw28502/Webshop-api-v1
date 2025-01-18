@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using V1.Data;
@@ -11,9 +12,11 @@ using V1.Data;
 namespace V1.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    partial class PostgresDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250107150422_AddEmailToUserTable")]
+    partial class AddEmailToUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +34,6 @@ namespace V1.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Password")
                         .IsRequired()

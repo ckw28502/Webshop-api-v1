@@ -4,7 +4,8 @@ using V1.Data;
 using V1.Middlewares;
 using V1.Repositories;
 using V1.Services;
-using V1.Utils;
+using V1.Utils.EmailSender;
+using V1.Utils.PasswordHasher;
 
 namespace V1
 {
@@ -14,17 +15,17 @@ namespace V1
 
         private static async Task Main(string[] args)
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-            // Load env
+            // Load environment variables from .env file (if present)
             Env.Load();
 
-            // Add services to the container.
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            // Initialize the WebApplicationBuilder
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container
             builder.Services.AddOpenApi();
 
             // Add CORS policy
-            builder.Services.AddCors( options =>
+            builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
@@ -43,18 +44,27 @@ namespace V1
                 });
             });
 
-            // Add PostgreSQL connection string from env
+            // Load PostgreSQL connection string from environment variable
             string? connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONN_STR");
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test" && string.IsNullOrEmpty(connectionString))
             {
                 throw new InvalidOperationException("PostgreSQL connection string is not set");
             }
 
-            // Add connection string to db context
-            builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(connectionString));
+            // Register PostgreSQL DbContext
+            builder.Services.AddDbContext<PostgresDbContext>(options =>
+                options.UseNpgsql(connectionString));
 
-            // Register utils services
+            // Load EmailSettings and replace placeholders with environment variables
+            builder.Configuration["EmailSettings:SenderEmail"] = Environment.GetEnvironmentVariable("SMTP_EMAIL");
+            builder.Configuration["EmailSettings:Password"] = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
+
+            // Register email settings from configuration
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+            // Register utilities services
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
             // Register repositories for Dependency Injection
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -62,26 +72,31 @@ namespace V1
             // Register services for Dependency Injection
             builder.Services.AddScoped<IUserService, UserService>();
 
-            // Register the controllers
+            // Register controllers for Dependency Injection
             builder.Services.AddControllers();
 
+            // Build the application
             WebApplication app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
                 app.UseDeveloperExceptionPage();
             }
 
+            // Use CORS
             app.UseCors();
 
+            // Use HTTPS and Security Middleware
             app.UseHttpsRedirection();
             app.UseHsts();
             app.UseMiddleware<SecurityHeaderMiddleware>();
 
+            // Map controllers to endpoints
             app.MapControllers();
 
+            // Run the application
             await app.RunAsync();
         }
     }

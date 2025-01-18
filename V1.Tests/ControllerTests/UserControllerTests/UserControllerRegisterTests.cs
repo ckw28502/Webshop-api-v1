@@ -4,7 +4,7 @@ using Moq;
 using V1.DTOs;
 using V1.Services;
 
-namespace V1.Tests.Controllers.UserControllerTests
+namespace V1.Tests.ControllerTests.UserControllerTests
 {
     /// <summary>
     /// Tests for the UserController's Register endpoint.
@@ -26,6 +26,7 @@ namespace V1.Tests.Controllers.UserControllerTests
             _validRequest = new CreateUserDto
             {
                 Username = "user",
+                Email = "user@email.com",
                 Password = "User1234"
             };
         }
@@ -34,38 +35,42 @@ namespace V1.Tests.Controllers.UserControllerTests
         /// Provides test data for invalid CreateUserDto inputs.
         /// This is used for testing various validation error scenarios when the user input is incorrect.
         /// </summary>
-        public static TheoryData<string, string, string> GetInvalidCreateUserDtos
+        public static TheoryData<string, string, string, string> GetInvalidCreateUserDtos
         {
             get
             {
-                return new TheoryData<string, string, string>
+                return new TheoryData<string, string, string, string>
                 {
-                    { "", "Pass1234", "Username is required." },
-                    { "u", "Pass1234", "Username must be between 3 and 50 characters." },
-                    { "useruseruseruseruseruseruseruseruseruseruseruseruser", "Pass1234", "Username must be between 3 and 50 characters." },
-                    { "user", "", "Password is required." },
-                    { "user", "p", "Password must be at least 8 characters long." },
-                    { "user", "password", "Password must contain at least one uppercase letter." },
-                    { "user", "PASSWORD", "Password must contain at least one lowercase letter." },
-                    { "user", "Password", "Password must contain at least one number." },
+                    { "", "user@email.com", "Pass1234", "Username is required." },
+                    { "u", "user@email.com", "Pass1234", "Username must be between 3 and 50 characters." },
+                    { "useruseruseruseruseruseruseruseruseruseruseruseruser", "user@email.com", "Pass1234", "Username must be between 3 and 50 characters." },
+                    { "user", "", "Pass1234", "Email is required." },
+                    { "user", "user", "Pass1234", "Invalid email address." },
+                    { "user", "user@email.com", "", "Password is required." },
+                    { "user", "user@email.com", "p", "Password must be at least 8 characters long." },
+                    { "user", "user@email.com", "password", "Password must contain at least one uppercase letter." },
+                    { "user", "user@email.com", "PASSWORD", "Password must contain at least one lowercase letter." },
+                    { "user", "user@email.com", "Password", "Password must contain at least one number." },
                 };
             }
         }
 
         /// <summary>
         /// Test method that ensures a bad request response is returned when invalid user data is provided.
+        /// Verifies that the appropriate error message is returned for each invalid scenario.
         /// </summary>
         /// <param name="username">The username input to be tested.</param>
+        /// <param name="email">The email input to be tested.</param>
         /// <param name="password">The password input to be tested.</param>
         /// <param name="expectedErrorMessage">The expected error message in the response.</param>
         [Theory]
         [MemberData(nameof(GetInvalidCreateUserDtos))]
         public async Task CreateUser_ShouldReturnBadRequest_WhenInvalidDTOIsProvided(
-            string username, string password, string expectedErrorMessage
+            string username, string email, string password, string expectedErrorMessage
         )
         {
-            // Arrange: Create an object with the invalid username and password to simulate the request.
-            object requestBody = new { Username = username, Password = password };
+            // Arrange: Create an object with the invalid username, email, and password to simulate the request.
+            object requestBody = new { Username = username, Email = email, Password = password };
 
             // Act: Send the POST request to the /user endpoint with the invalid data.
             HttpResponseMessage response = await _client.PostAsJsonAsync("/user", requestBody);

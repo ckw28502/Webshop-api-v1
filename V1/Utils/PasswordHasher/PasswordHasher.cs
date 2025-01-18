@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace V1.Utils
+namespace V1.Utils.PasswordHasher
 {
     /// <summary>
     /// Provides functionality for hashing passwords securely using a salt and PBKDF2.
