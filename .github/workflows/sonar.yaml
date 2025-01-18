@@ -24,11 +24,6 @@ jobs:
           java-version: 17
           distribution: 'zulu'
 
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -40,19 +35,15 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache SonarQube Cloud scanner
-        id: cache-sonar-scanner
+      - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
-          path: ./.sonar/scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-      - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p ./.sonar/scanner
-          dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
+      - name: Install SonarCloud scanners
+        run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
@@ -66,7 +57,7 @@ jobs:
           SONAR_EXCLUSION: "**/Migrations/**"
           SONAR_COVERAGE_EXCLUSION: "**/Migrations/**,**/Program.cs"
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="${{ env.SONAR_COVERAGE_EXCLUSION }}" /d:sonar.exclusions="${{ env.SONAR_EXCLUSION }}"
+          dotnet-sonarscanner begin /k:"ckw28502_Webshop-api-v1" /o:"ckw28502" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="${{ env.SONAR_COVERAGE_EXCLUSION }}" /d:sonar.exclusions="${{ env.SONAR_EXCLUSION }}"
           dotnet build ${{ env.PROJECT_PATH }} --no-incremental
           dotnet-coverage collect "dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release" -f xml -o "coverage.xml"
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
