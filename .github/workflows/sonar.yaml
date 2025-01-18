@@ -11,6 +11,11 @@ on:
 jobs:
   sonar:
     runs-on: windows-latest
+    smtp4dev:
+        image: rnwood/smtp4dev
+        ports:
+          - 25:25       # SMTP port
+          - 8080:80   # Web UI/API port
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
