@@ -56,7 +56,7 @@ jobs:
       - name: Start smtp4dev
         run: |
           docker pull rnwood/smtp4dev
-          docker run -d -p 25:25 -p 8080:8080 --name smtp4dev rnwood/smtp4dev
+          docker run -d -p 25:25 -p 8080:80 --name smtp4dev rnwood/smtp4dev
 
       - name: Build and analyze
         env:
