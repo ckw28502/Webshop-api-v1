@@ -10,7 +10,13 @@ on:
 
 jobs:
   sonar:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    services:
+      smtp4dev:
+        image: rnwood/smtp4dev
+        ports:
+          - 25:25       # SMTP port
+          - 8080:80   # Web UI/API port
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -47,20 +53,20 @@ jobs:
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
 
-      - name: Install Docker
-        run: |
-          choco install docker-desktop
-          refreshenv
-          net start com.docker.service
+      # - name: Install Docker
+      #   run: |
+      #     choco install docker-desktop
+      #     refreshenv
+      #     net start com.docker.service
 
-      - name: Switch Docker to Linux Containers
-        run: |
-          & "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchLinuxEngine
+      # - name: Switch Docker to Linux Containers
+      #   run: |
+      #     & "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchLinuxEngine
 
-      - name: Start smtp4dev
-        run: |
-          docker pull rnwood/smtp4dev
-          docker run -d -p 25:25 -p 8080:80 --name smtp4dev rnwood/smtp4dev
+      # - name: Start smtp4dev
+      #   run: |
+      #     docker pull rnwood/smtp4dev
+      #     docker run -d -p 25:25 -p 8080:80 --name smtp4dev rnwood/smtp4dev
 
       - name: Build and analyze
         env:
