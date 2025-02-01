@@ -13,6 +13,6 @@ namespace V1.Utils.EmailSender
         /// <param name="subject">The subject of the email.</param>
         /// <param name="body">The body content of the email.</param>
         /// <returns>A task representing the asynchronous operation of sending the email.</returns>
-        Task SendEmail(string targetEmail, string subject, string body);
+        Task SendUserVerificationEmail(string targetEmail,string token);
     }
 }

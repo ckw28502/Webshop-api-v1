@@ -24,19 +24,16 @@ namespace V1.Utils.EmailSender
         /// <returns>A task representing the asynchronous operation.</returns>
         /// <exception cref="SmtpCommandException">Thrown if an error occurs during the SMTP communication.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the email template file is missing.</exception>
-        public async Task SendEmail(string targetEmail, string subject, string body)
+        private async Task SendEmail(string targetEmail, string body)
         {
             // Create the MIME message.
             MimeMessage message = new();
             message.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
             message.To.Add(MailboxAddress.Parse(targetEmail));
-            message.Subject = subject;
 
-            // Generate the body of the email using a template.
-            string bodyText = await GenerateEmailBody(subject, body);
             message.Body = new TextPart("html")
             {
-                Text = bodyText
+                Text = body
             };
 
             // Create and configure the SMTP client.
@@ -62,19 +59,26 @@ namespace V1.Utils.EmailSender
         /// <param name="body">The body of the email, to be inserted into the template.</param>
         /// <returns>A task that represents the asynchronous operation and contains the generated email body as a string.</returns>
         /// <exception cref="FileNotFoundException">Thrown if the email template file is not found.</exception>
-        private static async Task<string> GenerateEmailBody(string subject, string body)
+        private static async Task<string> GenerateEmailBody(string templateName)
         {
             // Define the path to the email template file.
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate.html");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateName + ".html");
 
             // Read the template file as a string.
             string template = await File.ReadAllTextAsync(templatePath);
 
-            // Replace placeholders in the template with the actual subject and body.
-            template = template.Replace("@Model.Subject", subject);
-            template = template.Replace("@Model.Body", body);
-
             return template;
+        }
+
+        public async Task SendUserVerificationEmail(string targetEmail, string token)
+        {
+            // Generate the body of the email using a template.
+            string body = await GenerateEmailBody("UserVerificationTemplate");
+
+            // Replace placeholders in the template with the actual subject and body.
+            body = body.Replace("@Model.Url", $"{Environment.GetEnvironmentVariable("FRONTEND_URL")}/verify?token={token}");
+
+            await SendEmail(targetEmail, body);
         }
     }
 }

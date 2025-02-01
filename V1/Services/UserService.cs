@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 using V1.DTOs;
 using V1.Models;
@@ -67,11 +68,7 @@ namespace V1.Services
                 await _userRepository.CreateUser(user);
 
                 // Send a registration confirmation email
-                await _emailSender.SendEmail(
-                    request.Email,
-                    "Confirm registration",
-                    "You are registered"
-                );
+                await _emailSender.SendUserVerificationEmail(request.Email, "token");
 
                 // Commit the transaction
                 await transaction.CommitAsync();
