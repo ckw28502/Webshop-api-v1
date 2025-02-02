@@ -49,5 +49,7 @@ namespace V1.Models
         /// </summary>
         [Required(ErrorMessage = "Salt is required.")]
         public required byte[] Salt { get; set; } = [];
+
+        public string? EmailVerificationToken { get; set; }
     }
 }
