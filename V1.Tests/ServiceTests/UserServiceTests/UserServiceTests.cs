@@ -1,5 +1,6 @@
 using Moq;
 using V1.Repositories;
+using V1.Security.JWT;
 using V1.Services;
 using V1.Utils.EmailSender;
 using V1.Utils.PasswordHasher;
@@ -26,6 +27,8 @@ namespace V1.Tests.ServiceTests.UserServiceTests
         /// </summary>
         protected readonly Mock<IEmailSender> _emailSenderMock;
 
+        protected readonly Mock<IJwtGenerator> _jwtGeneratorMock;
+
         /// <summary>
         /// Instance of the <see cref="UserService"/> class being tested, initialized with the mocked dependencies.
         /// </summary>
@@ -46,8 +49,15 @@ namespace V1.Tests.ServiceTests.UserServiceTests
             // Mock the IEmailSender to simulate sending emails during tests.
             _emailSenderMock = new Mock<IEmailSender>();
 
+            _jwtGeneratorMock = new Mock<IJwtGenerator>();
+
             // Initializing the UserService with mocked dependencies, making it ready for testing.
-            _userService = new UserService(_userRepositoryMock.Object, _passwordHasherMock.Object, _emailSenderMock.Object);
+            _userService = new UserService(
+                _userRepositoryMock.Object, 
+                _passwordHasherMock.Object, 
+                _emailSenderMock.Object,
+                 _jwtGeneratorMock.Object
+            );
         }
 
         /// <summary>

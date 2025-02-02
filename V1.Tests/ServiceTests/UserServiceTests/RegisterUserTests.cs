@@ -48,6 +48,7 @@ namespace V1.Tests.ServiceTests.UserServiceTests
             _passwordHasherMock.Verify(hasher => hasher.HashPassword(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Never);
             _emailSenderMock.Verify(mailSender => mailSender.SendUserVerificationEmail(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _jwtGeneratorMock.Verify(jwtGenerator => jwtGenerator.GenerateToken(It.IsAny<Guid>(), _request.Username), Times.Never);
         }
 
         /// <summary>
@@ -70,6 +71,8 @@ namespace V1.Tests.ServiceTests.UserServiceTests
             _passwordHasherMock.Verify(hasher => hasher.HashPassword(It.IsAny<string>()), Times.Never);
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Never);
             _emailSenderMock.Verify(mailSender => mailSender.SendUserVerificationEmail(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _jwtGeneratorMock.Verify(jwtGenerator => jwtGenerator.GenerateToken(It.IsAny<Guid>(), _request.Username), Times.Never);
+
         }
 
         /// <summary>
@@ -95,6 +98,7 @@ namespace V1.Tests.ServiceTests.UserServiceTests
             _userRepositoryMock.Setup(repo => repo.EmailExists(_request.Email)).ReturnsAsync(false);
             MockHashPassword();
             _userRepositoryMock.Setup(repo => repo.StartTransaction()).ReturnsAsync(_transactionMock.Object);
+            _jwtGeneratorMock.Setup(jwtGenerator => jwtGenerator.GenerateToken(It.IsAny<Guid>(), _request.Username)).Returns("token");
 
             // Simulate errors
             if (createUserThrows)
@@ -131,6 +135,7 @@ namespace V1.Tests.ServiceTests.UserServiceTests
             _passwordHasherMock.Verify(hasher => hasher.HashPassword(_request.Password), Times.Once);
             _userRepositoryMock.Verify(repo => repo.CreateUser(It.IsAny<UserModel>()), Times.Once);
             _emailSenderMock.Verify(mailSender => mailSender.SendUserVerificationEmail(_request.Email, It.IsAny<string>()), Times.Once);
+            _jwtGeneratorMock.Verify(jwtGenerator => jwtGenerator.GenerateToken(It.IsAny<Guid>(), _request.Username), Times.Once);
             _transactionMock.Verify(transaction => transaction.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }

@@ -63,7 +63,7 @@ namespace V1.Services
             };
 
             // Generate an email verification token
-            string emailVerificationToken = _jwtGenerator.GenerateToken(user.Id, request.Email);
+            string emailVerificationToken = _jwtGenerator.GenerateToken(user.Id, request.Username);
             user.EmailVerificationToken = emailVerificationToken;
 
             // Begin database transaction to ensure atomic operations
