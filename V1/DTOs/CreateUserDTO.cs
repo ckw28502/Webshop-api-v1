@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using V1.Attributes;
+using V1.Commons.Enums;
+using V1.Converters;
 
 namespace V1.DTOs
 {
@@ -35,5 +38,8 @@ namespace V1.DTOs
         /// </summary>
         [PasswordValidation()]
         public required string Password { get; set; }
+
+        [JsonConverter(typeof(LanguageConverter))]
+        public required Language Language { get; set; }
     }
 }
